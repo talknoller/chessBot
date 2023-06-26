@@ -1,3 +1,4 @@
+from board import Board
 from square import Square
 from piece import Piece
 
@@ -9,9 +10,9 @@ def generate_board():
         row = []
         for j in range(8):
             if is_black:
-                square = Square(i, j, 'b', None, None, None)
+                square = Square(i, j, 'b', None)
             else:
-                square = Square(i, j, 'w', None, None, None)
+                square = Square(i, j, 'w', None)
             row.append(square)
             is_black = not is_black
         board.append(row)
@@ -52,14 +53,16 @@ wknight = Piece('n', 'w')
 wbishop = Piece('b', 'w')
 wqueen = Piece('q', 'w')
 wking = Piece('k', 'w')
-board = generate_board()
-test_file = 4
-test_row = 0
-board[test_file][test_row].piece = wking
+board = Board(generate_board())
+test_cord = [6, 7]
+board.squares[test_cord[0]][test_cord[1]].piece = wknight
 
-
-print("knight is at " + array_to_cord([test_file, test_row]))
-
-for move in board[test_file][test_row].available_moves():
-    print(array_to_cord(move))
+print("knight starts at " + array_to_cord(test_cord))
+# for move in board.legal_moves(test_cord):
+#     print(array_to_cord(move))
+for i in range(10):
+    next_cord = board.legal_moves(test_cord)[0]
+    board.make_move(test_cord, next_cord)
+    test_cord = next_cord
+    board.print_pieces()
 
