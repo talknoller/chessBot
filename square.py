@@ -5,3 +5,5 @@ class Square:
         self.color = color
         self.piece = piece
 
+    def get_cord(self):
+        return [self.file, self.row]

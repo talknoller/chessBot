@@ -10,9 +10,9 @@ def generate_board():
         row = []
         for j in range(8):
             if is_black:
-                square = Square(i, j, 'b', None)
+                square = Square(i, j, 'b', Piece("none", "none"))
             else:
-                square = Square(i, j, 'w', None)
+                square = Square(i, j, 'w', Piece("none", "none"))
             row.append(square)
             is_black = not is_black
         board.append(row)
@@ -39,6 +39,10 @@ def array_to_cord(cord_array):
     return files[cord_array[0]] + str(cord_array[1] + 1)
 
 
+def move_to_string(move):
+    return array_to_cord(move[0]) + " to " + array_to_cord(move[1])
+
+
 wpawn = Piece('p', 'w')
 bpawn = Piece('p', 'b')
 
@@ -54,15 +58,13 @@ wbishop = Piece('b', 'w')
 wqueen = Piece('q', 'w')
 wking = Piece('k', 'w')
 board = Board(generate_board())
-test_cord = [6, 7]
-board.squares[test_cord[0]][test_cord[1]].piece = wknight
-
-print("knight starts at " + array_to_cord(test_cord))
-# for move in board.legal_moves(test_cord):
-#     print(array_to_cord(move))
-for i in range(10):
-    next_cord = board.legal_moves(test_cord)[0]
-    board.make_move(test_cord, next_cord)
-    test_cord = next_cord
-    board.print_pieces()
-
+king_cord = [7, 7]
+queen_cord = [7, 3]
+knight_cord = [5, 4]
+attacker_cord = [3, 3]
+# board.get_square(king_cord).piece = wking
+board.get_square(queen_cord).piece = bpawn
+board.get_square(knight_cord).piece = wknight
+board.print_pieces()
+for move in board.get_legal_moves_by_color("w"):
+    print(move_to_string(move))
