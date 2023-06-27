@@ -59,12 +59,17 @@ wqueen = Piece('q', 'w')
 wking = Piece('k', 'w')
 board = Board(generate_board())
 king_cord = [7, 7]
-queen_cord = [7, 3]
+queen_cord = [2, 6]
 knight_cord = [5, 4]
-attacker_cord = [3, 3]
+attacker_cord = [6, 2]
 # board.get_square(king_cord).piece = wking
 board.get_square(queen_cord).piece = bpawn
-board.get_square(knight_cord).piece = wknight
+# board.get_square(knight_cord).piece = wknight
+# board.get_square(attacker_cord).piece = wbishop
 board.print_pieces()
-for move in board.get_legal_moves_by_color("w"):
+for move in board.get_legal_moves_by_color("b"):
     print(move_to_string(move))
+
+# print(board.does_color_do_check("w"))
+# print(board.does_color_do_check("b"))
+
