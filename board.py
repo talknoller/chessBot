@@ -1,3 +1,8 @@
+from piece import Piece
+from square import array_to_cord
+import copy
+
+
 def is_square_in_list(square_cord_list, square_cord):
     for square in square_cord_list:
         if square[0] == square_cord[0] and square[1] == square_cord[1]:
@@ -5,12 +10,8 @@ def is_square_in_list(square_cord_list, square_cord):
     return False
 
 
-def array_to_cord(cord_array):
-    if cord_array[0] > 7 or cord_array[0] < 0 or cord_array[1] > 7 or cord_array[1] < 0:
-        return "invalid cords"
-
-    files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-    return files[cord_array[0]] + str(cord_array[1] + 1)
+def move_to_string(move):
+    return array_to_cord(move[0]) + " to " + array_to_cord(move[1])
 
 
 class Board:
@@ -24,7 +25,7 @@ class Board:
                 if square.piece is not None and square.piece.id != "none":
                     print(square.piece.__str__() + " is at " + array_to_cord([square.file, square.row]))
 
-    def legal_moves(self, square_cord):
+    def available_moves(self, square_cord):
         if square_cord[0] >= self.size or square_cord[1] >= self.size:
             print("square doesn't exist")
             return []
@@ -53,7 +54,7 @@ class Board:
 
                 if square.file < self.size - 1 and self.get_square(
                         [square.file + 1, square.row - 1]).piece.color != square.piece.color and self.get_square(
-                        [square.file + 1, square.row - 1]).piece.color != "none":
+                    [square.file + 1, square.row - 1]).piece.color != "none":
                     available_moves.append([square.file + 1, square.row - 1])
 
                 if square.file > 0 and self.get_square(
@@ -224,31 +225,30 @@ class Board:
 
         return available_moves
 
-    def make_move(self, current_square_cord, desired_square_cord):
-        moves = self.legal_moves(current_square_cord)
-        if len(moves) == 0 or not is_square_in_list(moves, desired_square_cord):
+    def make_move(self, move):
+        moves = self.available_moves(move[0])
+        if len(moves) == 0 or not is_square_in_list(moves, move[1]):
             print("illegal move")
             return
 
-        self.squares[desired_square_cord[0]][desired_square_cord[1]].piece = self.squares[current_square_cord[0]][
-            current_square_cord[1]].piece
-        self.squares[current_square_cord[0]][current_square_cord[1]].piece = None
+        self.get_square(move[1]).piece = self.get_square(move[0]).piece
+        self.get_square(move[0]).piece = Piece("none", "none")
 
     def get_square(self, cord):
         return self.squares[cord[0]][cord[1]]
 
-    def get_legal_moves_by_color(self, color):
+    def get_available_moves_by_color(self, color):
         legal_moves = []
         for row in self.squares:
             for square in row:
                 if square.piece.color == color:
-                    for move in self.legal_moves(square.get_cord()):
+                    for move in self.available_moves(square.get_cord()):
                         legal_moves.append([square.get_cord(), move])
         return legal_moves
 
     def threatened_squares_by_color(self, color):
         squares = []
-        moves = self.get_legal_moves_by_color(color)
+        moves = self.get_available_moves_by_color(color)
         for move in moves:
             squares.append(move[1])
         return squares
@@ -259,3 +259,20 @@ class Board:
             if self.get_square(threat).piece.id == "k" and self.get_square(threat).piece.color != color:
                 return True
         return False
+
+    def legal_moves(self, color):
+        legal_moves = []
+        if color == "w":
+            for move in self.get_available_moves_by_color(color):
+                clone = copy.deepcopy(self)
+                clone.make_move(move)
+                if not clone.does_color_do_check("b"):
+                    legal_moves.append(move)
+
+        elif color == "b":
+            for move in self.get_available_moves_by_color(color):
+                clone = copy.deepcopy(self)
+                clone.make_move(move)
+                if not clone.does_color_do_check("w"):
+                    legal_moves.append(move)
+        return legal_moves

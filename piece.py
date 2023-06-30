@@ -29,4 +29,7 @@ class Piece:
 
         if self.id == "q":
             string += "queen"
+
+        if self.id == "none":
+            string += "none"
         return string
