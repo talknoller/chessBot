@@ -1,4 +1,7 @@
 from board import Board, move_to_string
+from constants import WHITE_KING_STARTING_POSITION, WHITE_KINGS_ROOK_STARTING_POSITION, \
+    WHITE_QUEENS_ROOK_STARTING_POSITION
+from game import Game
 from square import Square, array_to_cord
 from piece import Piece
 
@@ -20,7 +23,7 @@ def generate_board():
     return Board(board)
 
 
-board = generate_board()
+game = Game(generate_board(), "w")
 
 wpawn = Piece('p', 'w')
 bpawn = Piece('p', 'b')
@@ -37,18 +40,12 @@ wbishop = Piece('b', 'w')
 wqueen = Piece('q', 'w')
 wking = Piece('k', 'w')
 
-king_cord = [7, 7]
-queen_cord = [1, 0]
-knight_cord = [2, 1]
-attacker_cord = [6, 2]
+game.board.get_square(WHITE_KING_STARTING_POSITION).piece = wking
+game.board.get_square(WHITE_KINGS_ROOK_STARTING_POSITION).piece = wrook
+game.board.get_square(WHITE_QUEENS_ROOK_STARTING_POSITION).piece = wrook
+game.board.get_square([0, 5]).piece = wrook
 
-board.get_square(king_cord).piece = wking
-board.get_square(queen_cord).piece = bbishop
-board.get_square(knight_cord).piece = wknight
-# board.get_square(attacker_cord).piece = wbishop
-board.print_pieces()
-for move in board.legal_moves("b"):
-    print(move_to_string(move))
-
-# print(board.does_color_do_check("w"))
-# print(board.does_color_do_check("b"))
+game.board.print_pieces()
+game.board.make_move("w0-0-0")
+print("white castle queen side")
+game.board.print_pieces()

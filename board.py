@@ -1,6 +1,7 @@
 from piece import Piece
 from square import array_to_cord
 import copy
+from constants import *
 
 
 def is_square_in_list(square_cord_list, square_cord):
@@ -11,6 +12,10 @@ def is_square_in_list(square_cord_list, square_cord):
 
 
 def move_to_string(move):
+    if move == "w0-0" or move == "b0-0":
+        return "0-0"
+    if move == "w0-0-0" or move == "b0-0-0":
+        return "0-0-0"
     return array_to_cord(move[0]) + " to " + array_to_cord(move[1])
 
 
@@ -87,10 +92,11 @@ class Board:
             for i in range(square.file + 1, self.size):
                 if self.get_square([i, square.row]).piece.color == "none":
                     available_moves.append([i, square.row])
-                elif self.get_square([square.file, i]).piece.color != square.piece.color:
+                elif self.get_square([i, square.row]).piece.color != square.piece.color:
                     available_moves.append([i, square.row])
                     break
                 else:
+
                     break
             for i in range(square.file - 1, -1, -1):
 
@@ -226,9 +232,22 @@ class Board:
         return available_moves
 
     def make_move(self, move):
-        moves = self.available_moves(move[0])
-        if len(moves) == 0 or not is_square_in_list(moves, move[1]):
-            print("illegal move")
+        if move == "w0-0":
+            print(move_to_string([WHITE_KING_STARTING_POSITION, WHITE_KINGS_KNIGHT_STARTING_POSITION]))
+            self.make_move([WHITE_KING_STARTING_POSITION, WHITE_KINGS_KNIGHT_STARTING_POSITION])
+            self.make_move([WHITE_KINGS_ROOK_STARTING_POSITION, WHITE_KINGS_BISHOP_STARTING_POSITION])
+            return
+        if move == "b0-0":
+            self.make_move([BLACK_KING_STARTING_POSITION, WHITE_KINGS_KNIGHT_STARTING_POSITION])
+            self.make_move([BLACK_KINGS_ROOK_STARTING_POSITION, WHITE_KINGS_BISHOP_STARTING_POSITION])
+            return
+        if move == "w0-0-0":
+            self.make_move([WHITE_KING_STARTING_POSITION, WHITE_QUEENS_BISHOP_STARTING_POSITION])
+            self.make_move([WHITE_QUEENS_ROOK_STARTING_POSITION, WHITE_QUEEN_STARTING_POSITION])
+            return
+        if move == "b0-0-0":
+            self.make_move([BLACK_KING_STARTING_POSITION, BLACK_QUEENS_BISHOP_STARTING_POSITION])
+            self.make_move([BLACK_KINGS_ROOK_STARTING_POSITION, BLACK_QUEEN_STARTING_POSITION])
             return
 
         self.get_square(move[1]).piece = self.get_square(move[0]).piece
