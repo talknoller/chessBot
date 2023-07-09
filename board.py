@@ -178,11 +178,10 @@ class Board:
                     [square.file + 1, square.row - 1]).piece.color != square.piece.color:
                 available_moves.append([square.file + 1, square.row - 1])
 
-            if square.row < self.size - 1 and self.get_square(
-                    [square.file, square.row + 1]).piece.color != square.piece.color:
+            if square.row < self.size - 1 and self.get_square([square.file, square.row + 1]).piece.color != square.piece.color:
                 available_moves.append([square.file, square.row + 1])
 
-            if square.file - 1 >= 0 and square.row < self.size - 1:
+            if square.file - 1 >= 0 and square.row < self.size - 1 and self.get_square([square.file - 1, square.row + 1]).piece.color != square.piece.color:
                 available_moves.append([square.file - 1, square.row + 1])
 
             if square.file - 1 >= 0 and self.get_square(

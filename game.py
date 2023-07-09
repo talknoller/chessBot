@@ -3,7 +3,7 @@ from constants import *
 
 class Game:
     def __init__(self, board, color_turn, white_king_castle=True, white_queen_castle=True, black_king_castle=True,
-                 black_queen_castle=True):
+                 black_queen_castle=True, status='p'):
         self.board = board
         self.color_turn = color_turn
         self.white_king_castle = white_king_castle
@@ -11,6 +11,7 @@ class Game:
         self.black_king_castle = black_king_castle
         self.black_queen_castle = black_queen_castle
         self.last_pawn_double_push = [7, 4]
+        self.status = status
 
     def legal_moves(self):
         moves = self.board.legal_moves(self.color_turn)
@@ -75,3 +76,21 @@ class Game:
                 else:
                     self.color_turn = 'w'
                 self.board.make_move(move)
+                return
+        print("illegal move")
+
+    def check_status(self):
+        if len(self.legal_moves()) != 0:
+            self.status = 'p'
+            return 'p'
+
+        if self.board.does_color_do_check('w'):
+            self.status = 'w'
+            return 'w'
+
+        if self.board.does_color_do_check('b'):
+            self.status = 'b'
+            return 'b'
+
+        self.status = "d"
+        return 'd'
