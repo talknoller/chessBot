@@ -24,11 +24,11 @@ class Board:
         self.squares = squares
         self.size = 8
 
-    def print_pieces(self):
-        for row in self.squares:
-            for square in row:
-                if square.piece is not None and square.piece.id != "none":
-                    print(square.piece.__str__() + " is at " + array_to_cord([square.file, square.row]))
+    def print_board(self):
+        for i in range(self.size):
+            for file in self.squares:
+                if file[i].piece is not None and file[i].piece.id != "none":
+                    print(file[i].piece.__str__() + " is at " + array_to_cord([file[i].file, file[i].row]))
 
     def available_moves(self, square_cord):
         if square_cord[0] >= self.size or square_cord[1] >= self.size:
@@ -44,12 +44,14 @@ class Board:
             if square.row < self.size - 1 and self.get_square([square.file, square.row + 1]).piece.color == "none":
                 available_moves.append([square.file, square.row + 1])
                 if square.file < self.size - 1 and self.get_square(
+                        [square.file + 1, square.row + 1]).piece.color != "none" and self.get_square(
                         [square.file + 1, square.row + 1]).piece.color != square.piece.color:
                     available_moves.append([square.file + 1, square.row + 1])
                 if square.file > 0 and self.get_square(
                         [square.file - 1, square.row + 1]).piece.color != square.piece.color and self.get_square(
                     [square.file - 1, square.row + 1]).piece.color != "none":
                     available_moves.append([square.file - 1, square.row + 1])
+
             if square.row == 1 and self.get_square([square.file, square.row + 2]).piece.color == "none":
                 available_moves.append([square.file, square.row + 2])
 
@@ -232,8 +234,15 @@ class Board:
         return available_moves
 
     def make_move(self, move):
+        if self.get_square(move[0]).piece.id == 'p' and self.get_square(move[1]).piece.id == "none" and \
+                move[0][0] != move[1][0] and self.get_square(move[0]).piece.color == 'w':
+            self.get_square([move[1][0], move[1][1] + 1]).piece = Piece("none", "none")
+
+        if self.get_square(move[0]).piece.id == 'p' and self.get_square(move[1]).piece.id == "none" and \
+                move[0][0] != move[1][0] and self.get_square(move[0]).piece.color == 'b':
+            self.get_square([move[1][0], move[1][1] - 1]).piece = Piece("none", "none")
+
         if move == "w0-0":
-            print(move_to_string([WHITE_KING_STARTING_POSITION, WHITE_KINGS_KNIGHT_STARTING_POSITION]))
             self.make_move([WHITE_KING_STARTING_POSITION, WHITE_KINGS_KNIGHT_STARTING_POSITION])
             self.make_move([WHITE_KINGS_ROOK_STARTING_POSITION, WHITE_KINGS_BISHOP_STARTING_POSITION])
             return
