@@ -65,3 +65,13 @@ class Game:
                           [(self.last_pawn_double_push[0]), self.last_pawn_double_push[1] + 1]])
 
         return moves
+
+    def make_move(self, move):
+        legal_moves = self.legal_moves()
+        for legal_move in legal_moves:
+            if move == legal_move:
+                if self.color_turn == 'w':
+                    self.color_turn = 'b'
+                else:
+                    self.color_turn = 'w'
+                self.board.make_move(move)

@@ -43,34 +43,32 @@ class Board:
         if square.piece.id == 'p' and square.piece.color == 'w':
             if square.row < self.size - 1 and self.get_square([square.file, square.row + 1]).piece.color == "none":
                 available_moves.append([square.file, square.row + 1])
-                if square.file < self.size - 1 and self.get_square(
-                        [square.file + 1, square.row + 1]).piece.color != "none" and self.get_square(
-                        [square.file + 1, square.row + 1]).piece.color != square.piece.color:
-                    available_moves.append([square.file + 1, square.row + 1])
-                if square.file > 0 and self.get_square(
-                        [square.file - 1, square.row + 1]).piece.color != square.piece.color and self.get_square(
-                    [square.file - 1, square.row + 1]).piece.color != "none":
-                    available_moves.append([square.file - 1, square.row + 1])
+                if square.row == 1 and self.get_square([square.file, square.row + 2]).piece.color == "none":
+                    available_moves.append([square.file, square.row + 2])
 
-            if square.row == 1 and self.get_square([square.file, square.row + 2]).piece.color == "none":
-                available_moves.append([square.file, square.row + 2])
+            if square.file < self.size - 1 and self.get_square(
+                    [square.file + 1, square.row + 1]).piece.color != "none" and self.get_square(
+                [square.file + 1, square.row + 1]).piece.color != square.piece.color:
+                available_moves.append([square.file + 1, square.row + 1])
+            if square.file > 0 and self.get_square(
+                    [square.file - 1, square.row + 1]).piece.color != square.piece.color and self.get_square(
+                [square.file - 1, square.row + 1]).piece.color != "none":
+                available_moves.append([square.file - 1, square.row + 1])
 
         if square.piece.id == 'p' and square.piece.color == 'b':
             if square.row > 0 and self.get_square([square.file, square.row - 1]).piece.color == "none":
                 available_moves.append([square.file, square.row - 1])
+                if square.row == 6 and self.get_square([square.file, square.row - 2]).piece.color == "none":
+                    available_moves.append([square.file, square.row - 2])
+            if square.file < self.size - 1 and self.get_square(
+                    [square.file + 1, square.row - 1]).piece.color != square.piece.color and self.get_square(
+                [square.file + 1, square.row - 1]).piece.color != "none":
+                available_moves.append([square.file + 1, square.row - 1])
 
-                if square.file < self.size - 1 and self.get_square(
-                        [square.file + 1, square.row - 1]).piece.color != square.piece.color and self.get_square(
-                    [square.file + 1, square.row - 1]).piece.color != "none":
-                    available_moves.append([square.file + 1, square.row - 1])
-
-                if square.file > 0 and self.get_square(
-                        [square.file - 1, square.row - 1]).piece.color != square.piece.color and self.get_square(
-                    [square.file - 1, square.row - 1]).piece.color != "none":
-                    available_moves.append([square.file - 1, square.row - 1])
-
-            if square.row == 6 and self.get_square([square.file, square.row - 2]).piece.color == "none":
-                available_moves.append([square.file, square.row - 2])
+            if square.file > 0 and self.get_square(
+                    [square.file - 1, square.row - 1]).piece.color != square.piece.color and self.get_square(
+                [square.file - 1, square.row - 1]).piece.color != "none":
+                available_moves.append([square.file - 1, square.row - 1])
 
         if square.piece.id == 'r' or square.piece.id == 'q':
             for i in range(square.row + 1, self.size):
