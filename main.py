@@ -1,6 +1,7 @@
 from board import Board, move_to_string
 from constants import *
-from game import Game
+from game import Game, string_to_cord
+from player import Player
 from square import Square, array_to_cord
 from piece import Piece
 
@@ -22,8 +23,6 @@ def generate_board():
     return Board(board)
 
 
-def string_to_cord(string):
-    return [ord(string[0]) - ord('a'), int(string[1]) - 1]
 
 
 def create_game_starting_position():
@@ -104,10 +103,12 @@ def create_game_starting_position():
 
 
 game = create_game_starting_position()
+player = Player(game, 'b')
 
 while game.check_status() == 'p':
     move_string = input(game.color_turn + " turn:\n")
     move = [string_to_cord(move_string[0:2]), string_to_cord(move_string[3:])]
     game.make_move(move)
+    player.play_random_move()
 
 print("game ended as " + game.status)

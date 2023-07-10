@@ -1,6 +1,10 @@
 from constants import *
 
 
+def string_to_cord(string):
+    return [ord(string[0]) - ord('a'), int(string[1]) - 1]
+
+
 class Game:
     def __init__(self, board, color_turn, white_king_castle=True, white_queen_castle=True, black_king_castle=True,
                  black_queen_castle=True, status='p'):
@@ -94,3 +98,16 @@ class Game:
 
         self.status = "d"
         return 'd'
+
+    # def make_move_by_string(self, string):
+    #     string.replace("+", "")
+    #     string.replace("x", "")
+    #     end_pose = string_to_cord(string[1:])
+    #     piece_id = string.lower[0]
+    #
+    #     short_list = []
+    #     for move in self.legal_moves():
+    #         if move[1] == end_pose:
+    #             short_list.append(move)
+    #
+

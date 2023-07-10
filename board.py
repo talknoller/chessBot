@@ -4,6 +4,8 @@ import copy
 from constants import *
 
 
+
+
 def is_square_in_list(square_cord_list, square_cord):
     for square in square_cord_list:
         if square[0] == square_cord[0] and square[1] == square_cord[1]:
